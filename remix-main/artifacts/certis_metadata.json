@@ -412,7 +412,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"remix-main/contract(ipfs).sol": "certis"
+			"contract(ipfs).sol": "certis"
 		},
 		"evmVersion": "london",
 		"libraries": {},
@@ -426,7 +426,7 @@
 		"remappings": []
 	},
 	"sources": {
-		"remix-main/contract(ipfs).sol": {
+		"contract(ipfs).sol": {
 			"keccak256": "0x85d334623febc95a7136a6537d2af2fca9d34075c6c95849a61236a5f3a5def6",
 			"urls": [
 				"bzz-raw://8f2683966caf518ed6d8ed7bd94b125b0c80afe712dddbe071a4c45f4ccc3327",

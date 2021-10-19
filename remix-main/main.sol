@@ -5,6 +5,8 @@ import "./Certificate_NFT.sol";
 contract quanly{
     
     CertificateNFT NFT;
+    Certificate[] AllCert;
+    
     event issueCert(string title, string signature, string content ,uint tokenID);
    
     modifier onlyOwner {
@@ -34,7 +36,7 @@ contract quanly{
     }
     
     mapping (address => Author) public authors;//chứa dữ liệu những người có quyền cấp chứng nhận
-    mapping(address => Certificate[]) public student; //chứa dữ liệu người được nhận chứng nhận
+    mapping(address => uint[]) public student; //chứa dữ liệu người được nhận chứng nhận
     
     
     //hàm cấp quyền cho author chỉ admin tối cao mới có quyền chạy hàm
@@ -49,16 +51,29 @@ contract quanly{
         
         if(authors[msg.sender].status){
             uint tokenID = NFT.safeMint(msg.sender,content);
-            student[_student].push(Certificate(title,content,block.timestamp,msg.sender,signature,tokenID));
-            
+            student[_student].push(AllCert.length);
+            AllCert.push(Certificate(title,content,block.timestamp,msg.sender,signature,tokenID));
             emit issueCert(title, signature, content , tokenID);
         }else revert("khong cos quyen");
         
     }
     
     //hàm lấy danh sách chứng nhận của người có địa chỉ là _address (dữ liệu trả về trên web3js)
-    function getCer(address _address) public view returns(Certificate[] memory){
+    function getCerbyAddress(address _address) public view returns(uint[] memory){
         return student[_address];
+    }
+    
+    // Lấy danh sách chứng nhận bằng array Allcert
+    function getCerbyID(uint _ordering) public view returns(bool,string memory, string memory, uint,address, uint){
+        if(_ordering>=0 && _ordering<AllCert.length && AllCert.length>0){
+            return (true, AllCert[_ordering].title, AllCert[_ordering].content, AllCert[_ordering].date, AllCert[_ordering].author , AllCert[_ordering].tokenID);
+        }
+        else{
+            return (false,"","",0,msg.sender,0);
+        }
+    }
+    function Counter() public view returns(uint){
+        return AllCert.length;
     }
     
 }

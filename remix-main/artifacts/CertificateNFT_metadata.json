@@ -492,7 +492,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"remix-main/Certificate_NFL.sol": "CertificateNFT"
+			"Certificate_NFT.sol": "CertificateNFT"
 		},
 		"evmVersion": "london",
 		"libraries": {},
@@ -610,7 +610,7 @@
 				"dweb:/ipfs/QmcsVgLgzWdor3UnAztUkXKNGcysm1MPneWksF72AvnwBx"
 			]
 		},
-		"remix-main/Certificate_NFL.sol": {
+		"Certificate_NFT.sol": {
 			"keccak256": "0x1c3dd7d96c7ffeb36395c4054e30487f0a384e9c3a79a107dd03d41f0cbefdf9",
 			"license": "MIT",
 			"urls": [

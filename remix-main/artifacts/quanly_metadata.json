@@ -48,6 +48,19 @@
 				"type": "event"
 			},
 			{
+				"inputs": [],
+				"name": "Counter",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
 				"inputs": [
 					{
 						"internalType": "string",
@@ -138,44 +151,56 @@
 						"type": "address"
 					}
 				],
-				"name": "getCer",
+				"name": "getCerbyAddress",
 				"outputs": [
 					{
-						"components": [
-							{
-								"internalType": "string",
-								"name": "title",
-								"type": "string"
-							},
-							{
-								"internalType": "string",
-								"name": "content",
-								"type": "string"
-							},
-							{
-								"internalType": "uint256",
-								"name": "date",
-								"type": "uint256"
-							},
-							{
-								"internalType": "address",
-								"name": "author",
-								"type": "address"
-							},
-							{
-								"internalType": "string",
-								"name": "signature",
-								"type": "string"
-							},
-							{
-								"internalType": "uint256",
-								"name": "tokenID",
-								"type": "uint256"
-							}
-						],
-						"internalType": "struct quanly.Certificate[]",
+						"internalType": "uint256[]",
 						"name": "",
-						"type": "tuple[]"
+						"type": "uint256[]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_ordering",
+						"type": "uint256"
+					}
+				],
+				"name": "getCerbyID",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					},
+					{
+						"internalType": "string",
+						"name": "",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
 					}
 				],
 				"stateMutability": "view",
@@ -197,33 +222,8 @@
 				"name": "student",
 				"outputs": [
 					{
-						"internalType": "string",
-						"name": "title",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "content",
-						"type": "string"
-					},
-					{
 						"internalType": "uint256",
-						"name": "date",
-						"type": "uint256"
-					},
-					{
-						"internalType": "address",
-						"name": "author",
-						"type": "address"
-					},
-					{
-						"internalType": "string",
-						"name": "signature",
-						"type": "string"
-					},
-					{
-						"internalType": "uint256",
-						"name": "tokenID",
+						"name": "",
 						"type": "uint256"
 					}
 				],
@@ -371,11 +371,11 @@
 			]
 		},
 		"main.sol": {
-			"keccak256": "0x4c664a781c08472dc8502521b047164856d8525fdaadac9e94a8ef308166b7a8",
+			"keccak256": "0xd8c33e5d9f7689070bfd3b8fac2f9b43589ca0a1ef20aee7792a785fc36067e6",
 			"license": "open-source",
 			"urls": [
-				"bzz-raw://76b525248bd6151a5ea9f7df5d7284b38a5ca95b48508399ea1ced443c213768",
-				"dweb:/ipfs/QmNdaacdG1Uubu1UMJAHnVbpbwVjedmMkAGbRVTyYPdUH3"
+				"bzz-raw://0904655c0b54f65b367b819262d77947799ac6fff0eca9329a5a6601ebbb3a83",
+				"dweb:/ipfs/QmZcPQ3Pjue9WtUJppxE8fPwUq8MkVF843tk5zz66npuYh"
 			]
 		}
 	},

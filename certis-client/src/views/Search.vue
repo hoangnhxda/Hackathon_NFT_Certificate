@@ -117,13 +117,69 @@ export default {
       this.cert=item
       this.dialog=true;
     }
-  },
+  }
+  ,
   beforeMount() {
-    contract.methods.getCerts().call().then((data)=>{this.items=data})
-
-    contract.events.dataChange().on('data',()=>{
-      contract.methods.getCerts().call().then((data)=>{this.items=data})
+    let getitem =  getCertificate();
+    getitem.then((result)=>{console.log(result)})
+    
+    /*
+    contract.methods.getCer().call().then((data)=>{
+      console.log(data);
+      this.items=data;
     })
+  
+    contract.events.dataChange().on('data',()=>{
+    contract.methods.getCerts().call().then((data)=>{this.items=data})
+    })
+    */
   },
 };
+async function getCertificate() {
+  var items = [];
+  // Lay tong so Certificate
+    var a = await contract.methods.Counter().call().then(async (length)=>{
+    console.log("Total Certificate: " + length);
+    // loop through each certificate
+    for(let i = 0; i < length; i++){
+       var b = await contract.methods.getCerbyID(i).call().then(async (data) =>{
+        //console.log(data);
+        if(data[0]){
+           // get image from metadata
+          var metalink = data[2].replace("ipfs://","https://ipfs.io/ipfs/");
+          const response = await fetch(metalink);
+          if(!response.ok)
+          throw new Error(response.statusText);
+          const json = await response.json();
+          let image = json.image.replace("ipfs://","https://ipfs.io/ipfs/");
+
+          /// update item
+          var newitem = {
+            userAddress: data[4],
+            title: data[1],
+            date: timeConverter(data[3]),
+            tokenUrl: image,
+          }
+          items.push(newitem);
+        }
+      })
+    }
+
+  })
+  return items;
+}
+
+/// timestamp to date 
+function timeConverter(UNIX_timestamp){
+  var a = new Date(UNIX_timestamp * 1000);
+  var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var year = a.getFullYear();
+  var month = months[a.getMonth()];
+  var date = a.getDate();
+  var hour = a.getHours();
+  var min = a.getMinutes();
+  var sec = a.getSeconds();
+  var time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec ;
+  return time;
+}
 </script>
