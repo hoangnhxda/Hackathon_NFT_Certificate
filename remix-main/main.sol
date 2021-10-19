@@ -19,7 +19,7 @@ contract quanly{
         uint date;//ngày cấp
         address author;//địa chỉ người cấp
         string signature;//chữ ký sô của người cấp
-        
+        uint tokenID;
     }
     //cấu trúc một người có quyền cấp
     struct Author{
@@ -48,9 +48,10 @@ contract quanly{
     function addCer(address _student, string memory title, string memory content, string memory signature) public{
         
         if(authors[msg.sender].status){
-            student[_student].push(Certificate(title,content,block.timestamp,msg.sender,signature));
-            uint index = NFT.safeMint(msg.sender,content);
-            emit issueCert(title, signature, content , index);
+            uint tokenID = NFT.safeMint(msg.sender,content);
+            student[_student].push(Certificate(title,content,block.timestamp,msg.sender,signature,tokenID));
+            
+            emit issueCert(title, signature, content , tokenID);
         }else revert("khong cos quyen");
         
     }
