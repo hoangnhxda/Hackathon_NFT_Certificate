@@ -48,68 +48,7 @@ export default {
       { text: "Time", value: "date" },
       { text: "Actions", value: "actions", sortable: false },
     ],
-    items: [
-      {
-        userAddress: "test address",
-        title: "Test Cert",
-        date: 132156165,
-        tokenUrl: "https://picsum.photos/1000",
-      },
-      {
-        userAddress: "test address",
-        title: "Test Cert",
-        date: 132156165,
-        tokenUrl: "https://picsum.photos/1000",
-      },
-      {
-        userAddress: "test address",
-        title: "Test Cert",
-        date: 132156165,
-        tokenUrl: "https://picsum.photos/1000",
-      },
-      {
-        userAddress: "test address",
-        title: "Test Cert",
-        date: 132156165,
-        tokenUrl: "https://picsum.photos/1000",
-      },
-      {
-        userAddress: "test address",
-        title: "Test Cert",
-        date: 132156165,
-        tokenUrl: "https://picsum.photos/1000",
-      },
-      {
-        userAddress: "test address",
-        title: "Test Cert",
-        date: 132156165,
-        tokenUrl: "https://picsum.photos/1000",
-      },
-      {
-        userAddress: "test address",
-        title: "Test Cert",
-        date: 132156165,
-        tokenUrl: "https://picsum.photos/1000",
-      },
-      {
-        userAddress: "test address",
-        title: "Test Cert",
-        date: 132156165,
-        tokenUrl: "https://picsum.photos/1000",
-      },
-      {
-        userAddress: "test address",
-        title: "Test Cert",
-        date: 132156165,
-        tokenUrl: "https://picsum.photos/1000",
-      },
-      {
-        userAddress: "test address",
-        title: "Test Cert",
-        date: 132156165,
-        tokenUrl: "https://picsum.photos/1000",
-      },
-    ],
+    items: [],
     search: "",
   }),
   methods: {
@@ -120,22 +59,19 @@ export default {
   }
   ,
   beforeMount() {
-    let getitem =  getCertificate();
-    getitem.then((result)=>{console.log(result)})
+     contract.methods.getAllCer().call().then((data)=>{
+       console.log(data);
+     })
     
-    /*
-    contract.methods.getCer().call().then((data)=>{
-      console.log(data);
-      this.items=data;
-    })
-  
-    contract.events.dataChange().on('data',()=>{
-    contract.methods.getCerts().call().then((data)=>{this.items=data})
-    })
-    */
+
+
+    
   },
 };
+
+
 async function getCertificate() {
+  console.log("hello  ")
   var items = [];
   // Lay tong so Certificate
     var a = await contract.methods.Counter().call().then(async (length)=>{
@@ -143,7 +79,7 @@ async function getCertificate() {
     // loop through each certificate
     for(let i = 0; i < length; i++){
        var b = await contract.methods.getCerbyID(i).call().then(async (data) =>{
-        //console.log(data);
+        console.log('data',data);
         if(data[0]){
            // get image from metadata
           var metalink = data[2].replace("ipfs://","https://ipfs.io/ipfs/");

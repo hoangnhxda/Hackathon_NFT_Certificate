@@ -1,168 +1,65 @@
-pragma solidity ^0.8.5;
+//SPDX-License-Identifier: open-source
+pragma solidity ^0.8.2;
+import "./Certificate_NFT.sol";
 
-contract certis{
+contract quanly{
     
+    CertificateNFT NFT;
+    Certificate[] AllCert;
+    
+    event issueCert(string title, string signature, string tokenUrl ,uint tokenID,address userAddress);
+   
+    modifier onlyOwner {
+        require(msg.sender == deployAddress, "Ownable: You are not the owner");
+        _;
+    }
+    
+    //cấu trúc một giấy chứng nhận
     struct Certificate{
-        address sender;
-        address receiver;
-        uint date;
-        string ipfsLink;
-        string signature;
+        string title; //tên chứng nhận
+        string tokenUrl;//nội dung
+        uint date;//ngày cấp
+        string signature;//chữ ký sô của người cấp
+        uint tokenID;
+        address userAddress;
     }
-    
-    struct User{
-        string userId;
-        address _address;
-        string name;
-        string dateOfBirth;
-        string avtLink;
-        string email;
-        string phone;
-        string detail;
-        uint[] certId;
-        string[] voted;
-    }
-    
+    //cấu trúc một người có quyền cấp
     struct Author{
-        address _address;
-        string name;
-        string avtLink;
-        string detail;
-        string email;
-        string phone;
-        int192 voteScore;
-        //mapping(address => bool) us;
-        //address[] users;
-        uint[] certId;
+        string name;//tên
+        bool status;//quyền hạn (được cấp hoặc không)
     }
     
+    address public deployAddress;//biến lưu địa chỉ của quản trị viên tối cao
+    constructor(address _AddressNFT){
+        deployAddress = msg.sender;//gán đại chỉ quản trị viên bằng người deploy hợp đồng thông minh
+        NFT = CertificateNFT(_AddressNFT);
+    }
     
-    Certificate[] public cert;
-    mapping(address => User) public users;
-    mapping(address => Author) public authors;
-    
-    address public admin = msg.sender;
+    //hàm thực hiện việc cấp chứng nhận. Chỉ những người được cấp quyền mới có thể chạy
+    function addCert( string memory title, string memory tokenUrl, string memory signature) public{
+            uint tokenID = NFT.safeMint(msg.sender,tokenUrl);
+            //student[_student].push(AllCert.length);
+            AllCert.push(Certificate(title,tokenUrl,block.timestamp,signature,tokenID,msg.sender));
+            emit issueCert(title, signature, tokenUrl , tokenID,msg.sender);
+    }
     
 
-
     
-//Author function--------------------
-
-    //Author Event-----------------------
-    
-        event certAdded(uint id);
-        event authorChange(address aAdress);
-
-    //-----------------------------------
-    
-    
-    function AuthorReg(
-        string memory name, 
- 
-        string memory avtLink, 
-        string memory detail, 
-        string memory email, 
-        string memory phone
-        ) public payable {
-        
-        address empty;
-        if(authors[msg.sender]._address!=empty){
-            revert("Address");
+    // Lấy danh sách chứng nhận bằng array Allcert
+    function getCerbyID(uint _ordering) public view returns(bool,string memory, string memory, uint, uint,address){
+        if(_ordering>=0 && _ordering<AllCert.length && AllCert.length>0){
+            return (true, AllCert[_ordering].title, AllCert[_ordering].tokenUrl, AllCert[_ordering].date, AllCert[_ordering].tokenID,AllCert[_ordering].userAddress);
         }
-        if(msg.value != 1e17){
-            revert("Amount");
-        }
-        
-        authors[msg.sender]._address = msg.sender;
-        authors[msg.sender].name = name;
-        authors[msg.sender].avtLink = avtLink;
-        authors[msg.sender].detail = detail;
-        authors[msg.sender].email = email;
-        authors[msg.sender].phone = phone;
-        
-    }
-    
-    function AuthorUpdate(string memory name, 
-        string memory avtLink, 
-        string memory detail, 
-        string memory email, 
-        string memory phone
-    ) public {
-        if(authors[msg.sender]._address == msg.sender){
-            authors[msg.sender].name = name;
-            authors[msg.sender].avtLink = avtLink;
-            authors[msg.sender].detail = detail;
-            authors[msg.sender].email = email;
-            authors[msg.sender].phone = phone;
-            emit authorChange(msg.sender);
-        }else{
-            revert("Address");
+        else{
+            address empty;
+            return (false,"","",0,0,empty);
         }
     }
-    
-    function checkAuthor(address _address) public view returns(bool){
-        address empty;
-        if(authors[_address]._address == empty){
-            return false;
-        }else{
-            return true;
-        }
+    function getAllCer() public view returns(Certificate[] memory){
+        return AllCert;
     }
-    
-  /*  function addUser(address userAddress) public {
-        
-        if(checkAuthor(msg.sender)){
-            if(!authors[msg.sender].us[userAddress]){
-                authors[msg.sender].users.push(userAddress);
-            }
-            authors[msg.sender].us[userAddress]=true;
-        }else{
-            revert();
-        }
-    }*/
-    
-    function addCert(address user, string memory signature, string memory ipfsLink) public {
-        //addUser(user);
-        if(checkAuthor(msg.sender)){
-            authors[msg.sender].certId.push(cert.length);
-            users[user].certId.push(cert.length);
-            cert.push(Certificate(msg.sender,user,block.timestamp,ipfsLink, signature));
-            emit certAdded(cert.length-1);
-        }else{
-            revert();
-        }
+    function Counter() public view returns(uint){
+        return AllCert.length;
     }
-    
-    function getAthorInfo(address author) public view returns(Author memory){
-        return authors[author];
-    }
-    
-    
-    
-    
-//User function--------------------
-
-
-    
-    function userUpdate(
-        string memory userId,
-        string memory name,
-        string memory dateOfBirth,
-        string memory avtLink,
-        string memory email,
-        string memory phone,
-        string memory detail
-    ) public {
-        users[msg.sender].userId = userId;
-        users[msg.sender].name = name;
-        users[msg.sender].dateOfBirth = dateOfBirth;
-        users[msg.sender].avtLink = avtLink;
-        users[msg.sender].email = email;
-        users[msg.sender].phone = phone;
-        users[msg.sender].detail = detail;
-    }
-    
-    
-    
     
 }

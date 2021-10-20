@@ -146,7 +146,7 @@ export default {
       .request({ method: "eth_requestAccounts" })
       .then((acc) => {
         this.address = acc[0];
-        
+        console.log(this.address)
         contract.methods
           .getCerts()
           .call()
@@ -154,11 +154,7 @@ export default {
             this.items=data.filter(cert => cert[0].toUpperCase()==this.address.toUpperCase())
           });
       })
-      .catch((err) => {
-        if ((err.code = 4001)) alert("Please connect to MetaMask.");
-        else alert(err);
-        this.$router.push("/");
-      });
+      
 
     contract.events.dataChange().on("data", () => {
       contract.methods
@@ -181,6 +177,7 @@ export default {
       if (!file && title == "") {
         alert("Thiếu thông tin");
       } else if (this.address != "") {
+        
         //chỗ này sẽ chạy cái function upload ảnh lên nơi lưu trữ, func này cần trả về url của ảnh
 
         let imageUrl = "https://source.unsplash.com/random/800x600/"; //lấy ngẫu nhiên cái ảnh nào đó trên mạng. sẽ thay bằng cái url được return của func trên
