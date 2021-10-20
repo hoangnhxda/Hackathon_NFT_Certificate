@@ -13,10 +13,7 @@ contract Cert{
     }
     
    
-    modifier onlyOwner {
-        require(msg.sender == deployAddress, "Ownable: You are not the owner");
-        _;
-    }
+
     
     
     Certificate[] public certs;
@@ -27,8 +24,8 @@ contract Cert{
     event dataChange(Certificate[] certs);
     
     function addCert(string memory tokenUrl, string memory title) public {
-         uint tokenID = NFT.safeMint(msg.sender,content);
-        certs.push(Certificate(msg.sender,title,tokenUrl,block.timestamp,tokenId));
+         uint tokenID = NFT.safeMint(msg.sender,tokenUrl);
+        certs.push(Certificate(msg.sender,title,tokenUrl,block.timestamp,tokenID));
         emit dataChange(certs);
     }
     function getCerts()public view returns( Certificate[] memory){
