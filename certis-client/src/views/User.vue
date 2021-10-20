@@ -139,9 +139,10 @@ export default {
     items: [],
   }),
   beforeMount() {
-    window.ethereum.on("accountsChanged", () => {
-      this.$router.push("/");
-    });
+    if(!window.ethereum) {
+      alert("Metamask??");
+      this.$router.push('/')
+    }
     ethereum
       .request({ method: "eth_requestAccounts" })
       .then((acc) => {

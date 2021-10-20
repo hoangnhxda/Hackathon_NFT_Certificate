@@ -59,18 +59,20 @@ export default {
   }
   ,
   beforeMount() {
-     contract.methods.getAllCer().call().then((data)=>{
-       console.log(data);
-     })
-    
 
+    
+    contract.methods.getCerts().call().then((data)=>{
+      data.forEach((item)=>{
+        console.log(item)
+      })
+    })
 
     
   },
 };
 
 
-async function getCertificate() {
+/* async function getCertificate() {
   console.log("hello  ")
   var items = [];
   // Lay tong so Certificate
@@ -103,7 +105,7 @@ async function getCertificate() {
 
   })
   return items;
-}
+} */
 
 /// timestamp to date 
 function timeConverter(UNIX_timestamp){
