@@ -1,0 +1,15 @@
+
+    async function ipfs(fname,file,day,des){
+        const client = new nftstorage.NFTStorage({ token: obj.nftapi })
+        const metadata = await client.store({
+        name: fname,
+        date: day,
+        description: des, 
+        imagename:file,
+        image: new nftstorage.File([await fs.promises.readFile('./public/images/'+file)], file, {
+            type: 'image/jpg',
+          }),
+        })
+        console.log(metadata.url)
+        return metadata.url;
+    }

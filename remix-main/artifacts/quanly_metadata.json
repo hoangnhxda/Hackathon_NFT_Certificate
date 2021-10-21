@@ -34,7 +34,7 @@
 					{
 						"indexed": false,
 						"internalType": "string",
-						"name": "content",
+						"name": "tokenUrl",
 						"type": "string"
 					},
 					{
@@ -42,6 +42,12 @@
 						"internalType": "uint256",
 						"name": "tokenID",
 						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "userAddress",
+						"type": "address"
 					}
 				],
 				"name": "issueCert",
@@ -64,35 +70,12 @@
 				"inputs": [
 					{
 						"internalType": "string",
-						"name": "name",
-						"type": "string"
-					},
-					{
-						"internalType": "address",
-						"name": "_address",
-						"type": "address"
-					}
-				],
-				"name": "addAuthor",
-				"outputs": [],
-				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "_student",
-						"type": "address"
-					},
-					{
-						"internalType": "string",
 						"name": "title",
 						"type": "string"
 					},
 					{
 						"internalType": "string",
-						"name": "content",
+						"name": "tokenUrl",
 						"type": "string"
 					},
 					{
@@ -101,33 +84,9 @@
 						"type": "string"
 					}
 				],
-				"name": "addCer",
+				"name": "addCert",
 				"outputs": [],
 				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "",
-						"type": "address"
-					}
-				],
-				"name": "authors",
-				"outputs": [
-					{
-						"internalType": "string",
-						"name": "name",
-						"type": "string"
-					},
-					{
-						"internalType": "bool",
-						"name": "status",
-						"type": "bool"
-					}
-				],
-				"stateMutability": "view",
 				"type": "function"
 			},
 			{
@@ -144,19 +103,45 @@
 				"type": "function"
 			},
 			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "_address",
-						"type": "address"
-					}
-				],
-				"name": "getCerbyAddress",
+				"inputs": [],
+				"name": "getAllCer",
 				"outputs": [
 					{
-						"internalType": "uint256[]",
+						"components": [
+							{
+								"internalType": "string",
+								"name": "title",
+								"type": "string"
+							},
+							{
+								"internalType": "string",
+								"name": "tokenUrl",
+								"type": "string"
+							},
+							{
+								"internalType": "uint256",
+								"name": "date",
+								"type": "uint256"
+							},
+							{
+								"internalType": "string",
+								"name": "signature",
+								"type": "string"
+							},
+							{
+								"internalType": "uint256",
+								"name": "tokenID",
+								"type": "uint256"
+							},
+							{
+								"internalType": "address",
+								"name": "userAddress",
+								"type": "address"
+							}
+						],
+						"internalType": "struct quanly.Certificate[]",
 						"name": "",
-						"type": "uint256[]"
+						"type": "tuple[]"
 					}
 				],
 				"stateMutability": "view",
@@ -193,38 +178,14 @@
 						"type": "uint256"
 					},
 					{
-						"internalType": "address",
-						"name": "",
-						"type": "address"
-					},
-					{
 						"internalType": "uint256",
 						"name": "",
 						"type": "uint256"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [
+					},
 					{
 						"internalType": "address",
 						"name": "",
 						"type": "address"
-					},
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"name": "student",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
 					}
 				],
 				"stateMutability": "view",
@@ -244,7 +205,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"main.sol": "quanly"
+			"contract(ipfs).sol": "quanly"
 		},
 		"evmVersion": "london",
 		"libraries": {},
@@ -370,12 +331,12 @@
 				"dweb:/ipfs/Qmc1FXhqFHSRMykAmf4BrRkKDGmHjiftbSLgUJ73Drt4AN"
 			]
 		},
-		"main.sol": {
-			"keccak256": "0xd8c33e5d9f7689070bfd3b8fac2f9b43589ca0a1ef20aee7792a785fc36067e6",
+		"contract(ipfs).sol": {
+			"keccak256": "0x97f8046ae79b4f5a2f7b1de9751ceb2136245564780d1c4016a7c11688deb04e",
 			"license": "open-source",
 			"urls": [
-				"bzz-raw://0904655c0b54f65b367b819262d77947799ac6fff0eca9329a5a6601ebbb3a83",
-				"dweb:/ipfs/QmZcPQ3Pjue9WtUJppxE8fPwUq8MkVF843tk5zz66npuYh"
+				"bzz-raw://b27db295407d637ae8aa4f6900107c3781c615ed2d03ac9b9351a086f08bd5d9",
+				"dweb:/ipfs/QmQhqVprHj3x8ZkkrJ5Sdhgurgdpecda8MUzXuakLW4afK"
 			]
 		}
 	},

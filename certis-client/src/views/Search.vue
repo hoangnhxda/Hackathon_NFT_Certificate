@@ -60,19 +60,21 @@ export default {
   ,
   beforeMount() {
 
-    
+    /*
     contract.methods.getCerts().call().then((data)=>{
       data.forEach((item)=>{
         console.log(item)
       })
     })
+    */
+    console.log (getCertificate());
 
     
   },
 };
 
 
-/* async function getCertificate() {
+async function getCertificate() {
   console.log("hello  ")
   var items = [];
   // Lay tong so Certificate
@@ -81,16 +83,18 @@ export default {
     // loop through each certificate
     for(let i = 0; i < length; i++){
        var b = await contract.methods.getCerbyID(i).call().then(async (data) =>{
-        console.log('data',data);
+        // console.log('data',data);
         if(data[0]){
            // get image from metadata
+          
           var metalink = data[2].replace("ipfs://","https://ipfs.io/ipfs/");
           const response = await fetch(metalink);
           if(!response.ok)
           throw new Error(response.statusText);
           const json = await response.json();
+          
           let image = json.image.replace("ipfs://","https://ipfs.io/ipfs/");
-
+          // console.log ("---img: " + image); 
           /// update item
           var newitem = {
             userAddress: data[4],
@@ -105,7 +109,7 @@ export default {
 
   })
   return items;
-} */
+} 
 
 /// timestamp to date 
 function timeConverter(UNIX_timestamp){
