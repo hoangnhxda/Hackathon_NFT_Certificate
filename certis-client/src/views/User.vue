@@ -143,28 +143,31 @@ export default {
       alert("Metamask??");
       this.$router.push('/')
     }
+    // Connect to MetaMask
     ethereum
       .request({ method: "eth_requestAccounts" })
       .then((acc) => {
         this.address = acc[0];
-        console.log(this.address)
-        contract.methods
-          .getCerts()
-          .call()
-          .then((data) => {
-            this.items=data.filter(cert => cert[0].toUpperCase()==this.address.toUpperCase())
-          });
+        console.log("Current Account: "+this.address);
       })
-      
 
+    window.ethereum.on('accountsChanged',(acc)=>{
+        this.address = acc[0];
+        console.log("Current Account: "+this.address);
+    }) 
+ /*
     contract.events.dataChange().on("data", () => {
+     
       contract.methods
         .getCerts()
         .call()
         .then((data) => {
+          console.log(this.address);
           this.items = data.filter(cert => cert[0].toUpperCase()==this.address.toUpperCase());
         });
+       
     });
+   */
   },
   methods: {
     show(item) {
