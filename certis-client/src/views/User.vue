@@ -1,5 +1,6 @@
 <template>
   <v-container>
+     <UploadImages />
     <v-data-table
       :headers="headers"
       :items="items"
@@ -117,6 +118,7 @@
 
 <script>
 import { contract } from "../web3";
+ import UploadImages from "vue-upload-drop-images"
 //import { NFTStorage, File } from "nft.storage";
 /* const apiKey =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDJEYTU1QmZlNjVBYkI2NjZiZkY2NjgxYmE0ZWY1NTM2ODdjNmIwYjIiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTYzNDU3NDYxMTM4NiwibmFtZSI6IkNlcnQifQ.6YOAUWGWF9OIY2iF-buoTDuN0NwQ9pE5Ajm1573VxjU";
@@ -169,6 +171,9 @@ export default {
     });
    */
   },
+  components: {
+                     UploadImages,
+                 },
   methods: {
     show(item) {
       this.cert = item;
