@@ -1,6 +1,9 @@
 <template>
   <v-container>
-     <UploadImages />
+     <UploadImages accept="image/*"
+                        label="File input"
+                        v-model="file" 
+                        @change="console.log(file)"/>
     <v-data-table
       :headers="headers"
       :items="items"
@@ -117,7 +120,7 @@
 </template>
 
 <script>
-import { contract } from "../web3";
+import { web3, contract } from "../web3";
  import UploadImages from "vue-upload-drop-images"
 //import { NFTStorage, File } from "nft.storage";
 /* const apiKey =
@@ -175,12 +178,42 @@ export default {
                      UploadImages,
                  },
   methods: {
+    handleImages(files){
+        console.log("upload test: " + files);
+    },
     show(item) {
       this.cert = item;
       this.dialogShow = true;
     },
     uploadImg(file) {
-      this.viewImage = URL.createObjectURL(file);
+       var reader = new FileReader();
+       reader.readAsDataURL(file);
+       // var accounts = await web3.eth.getAccounts()
+        
+       reader.onload = () => {
+        this.data = reader.result;
+        console.log(web3.utils.sha3(this.data));
+        var hash = web3.utils.sha3(this.data);
+        var signature = web3.eth.personal.sign(hash, this.address);
+        signature.then(function(result){
+          console.log(result);
+        });
+      }
+      // console.log(web3.utils.sha3("hjgsdgsk325235"));
+      
+      // this.viewImage = URL.createObjectURL(file);
+      // const requestOptions = {
+      //   method: "POST",
+      //   headers: { "Content-Type": "multipart/form-data" },
+      //   body: file
+      // };
+      // fetch("https://api.imgbb.com/1/upload", requestOptions)
+      //   .then(response => response.json(
+      //     console.log(response.json)
+      //   ))
+      //   .then(data => (
+      //     console.log(data)));
+      
     },
     uploadCert(file, title) {
       if (!file && title == "") {
@@ -191,12 +224,12 @@ export default {
 
         let imageUrl = "https://source.unsplash.com/random/800x600/"; //lấy ngẫu nhiên cái ảnh nào đó trên mạng. sẽ thay bằng cái url được return của func trên
 
-        contract.methods
-          .addCert(imageUrl, title)
-          .send({ from: this.address })
-          .then(() => {
-            alert("Upload Thành Công");
-          });
+        // contract.methods
+        //   .addCert(imageUrl, title)
+        //   .send({ from: this.address })
+        //   .then(() => {
+        //     alert("Upload Thành Công");
+        //   });
 
         this.file = null;
         this.title = "";
