@@ -7,7 +7,7 @@
     "build": "vue-cli-service build"
   },
   "dependencies": {
-    "core-js": "^3.6.5",
+    "core-js": "^3.19.0",
     "moralis": "^0.0.97",
     "nft.storage": "^3.3.0",
     "vue": "^2.6.11",

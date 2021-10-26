@@ -193,5 +193,38 @@ const abi = [
 const address = "0x08b2322F34888823524067c3734ED3B0C5639260" //contract address
 
 const contract = new web3.eth.Contract(abi, address);
-
+checkmetamask();
+async function checkmetamask(){
+	if (window.ethereum) {
+		try {
+		  // check if the chain to connect to is installed
+		  await window.ethereum.request({
+			method: 'wallet_switchEthereumChain',
+			params: [{ chainId: '0x4' }], // chainId must be in hexadecimal numbers
+		  });
+		} catch (error) {
+		  // This error code indicates that the chain has not been added to MetaMask
+		  // if it is not, then install it into the user MetaMask
+		  if (error.code === 4902) {
+			try {
+			  await window.ethereum.request({
+				method: 'wallet_addEthereumChain',
+				params: [
+				  {
+					chainId: '0x4',
+					rpcUrl: 'https://rinkeby-light.eth.linkpool.io/',
+				  },
+				],
+			  });
+			} catch (addError) {
+			  console.error(addError);
+			}
+		  }
+		  console.error(error);
+		}
+	  } else {
+		// if no window.ethereum then MetaMask is not installed
+		alert('MetaMask is not installed. Please consider installing it: https://metamask.io/download.html');
+	  } 
+  }
 export { web3, contract }

@@ -144,10 +144,14 @@ export default {
     items: [],
   }),
   beforeMount() {
+    /*
     if(!window.ethereum) {
       alert("Metamask??");
       this.$router.push('/')
     }
+    */
+    //checkmetamask();
+    
     // Connect to MetaMask
     ethereum
       .request({ method: "eth_requestAccounts" })
@@ -239,6 +243,8 @@ export default {
     },
   },
 };
+
+
 </script>
 
 <style lang="scss" scoped></style>
