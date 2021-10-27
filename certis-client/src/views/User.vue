@@ -1,6 +1,5 @@
 <template>
   <v-container>
-<<<<<<< HEAD
     <v-row>
       <v-col cols="8">
         <v-data-table
@@ -20,29 +19,6 @@
                 hide-details
                 class="mr-5"
               ></v-text-field>
-=======
-     <UploadImages accept="image/*"
-                        label="File input"
-                        v-model="file" 
-                        @change="console.log(file)"/>
-    <v-data-table
-      :headers="headers"
-      :items="items"
-      class="elevation-1"
-      loading="true"
-      :search="search"
-    >
-      <template v-slot:top>
-        <v-toolbar flat>
-          <v-text-field
-            v-model="search"
-            append-icon="mdi-magnify"
-            label="Search"
-            single-line
-            hide-details
-            class="mr-5"
-          ></v-text-field>
->>>>>>> 1aca08005ef6c00da05725c03477fc9da4987e50
 
               <v-dialog
                 v-model="dialog"
@@ -178,17 +154,14 @@
                     <v-row>
                       <v-col>
                         <h3 align="center">Avatar</h3>
-                        <v-avatar
-                          size="70"
-                          color="primary"
-                          align="center"
-                        >
-                          <img src="https://i.pravatar.cc/150?img=3" alt="alt">
+                        <v-avatar size="70" color="primary" align="center">
+                          <img
+                            src="https://i.pravatar.cc/150?img=3"
+                            alt="alt"
+                          />
                         </v-avatar>
                       </v-col>
-                      <v-col>
-
-                      </v-col>
+                      <v-col> </v-col>
                     </v-row>
                   </v-container>
                 </v-card-text>
@@ -221,7 +194,7 @@
 
 <script>
 import { web3, contract } from "../web3";
- import UploadImages from "vue-upload-drop-images"
+// import UploadImages from "vue-upload-drop-images"
 //import { NFTStorage, File } from "nft.storage";
 /* const apiKey =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDJEYTU1QmZlNjVBYkI2NjZiZkY2NjgxYmE0ZWY1NTM2ODdjNmIwYjIiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTYzNDU3NDYxMTM4NiwibmFtZSI6IkNlcnQifQ.6YOAUWGWF9OIY2iF-buoTDuN0NwQ9pE5Ajm1573VxjU";
@@ -245,92 +218,62 @@ export default {
     items: [],
   }),
   beforeMount() {
-<<<<<<< HEAD
     if (!window.ethereum) {
-=======
-    /*
-    if(!window.ethereum) {
->>>>>>> 1aca08005ef6c00da05725c03477fc9da4987e50
       alert("Metamask??");
       this.$router.push("/");
     }
-<<<<<<< HEAD
-    ethereum.request({ method: "eth_requestAccounts" }).then((acc) => {
-      this.address = acc[0];
-      console.log(this.address);
-      contract.methods
-        .getCerts()
-        .call()
-        .then((data) => {
-          this.items = data.filter(
-            (cert) => cert[0].toUpperCase() == this.address.toUpperCase()
-          );
-        });
-    });
-=======
-    */
-    //checkmetamask();
-    
-    // Connect to MetaMask
-    ethereum
-      .request({ method: "eth_requestAccounts" })
-      .then((acc) => {
-        this.address = acc[0];
-        console.log("Current Account: "+this.address);
-      })
->>>>>>> 1aca08005ef6c00da05725c03477fc9da4987e50
 
-    window.ethereum.on('accountsChanged',(acc)=>{
-        this.address = acc[0];
-        console.log("Current Account: "+this.address);
-    }) 
- /*
+    //checkmetamask();
+
+    // Connect to MetaMask
+    window.ethereum.request({ method: "eth_requestAccounts" }).then((acc) => {
+      this.address = acc[0];
+      console.log("Current Account: " + this.address);
+      getCertificate(this.address).then((data) => {
+        this.items = data;
+        console.log("data: ", this.items);
+      });
+    });
+
+    window.ethereum.on("accountsChanged", (acc) => {
+      this.address = acc[0];
+      console.log("Current Account: " + this.address);
+      getCertificate(this.address).then((data) => {
+        this.items = data;
+        console.log("data: ", this.items);
+      });
+    });
+    /*
     contract.events.dataChange().on("data", () => {
      
       contract.methods
         .getCerts()
         .call()
         .then((data) => {
-<<<<<<< HEAD
-          this.items = data.filter(
-            (cert) => cert[0].toUpperCase() == this.address.toUpperCase()
-          );
-=======
           console.log(this.address);
           this.items = data.filter(cert => cert[0].toUpperCase()==this.address.toUpperCase());
->>>>>>> 1aca08005ef6c00da05725c03477fc9da4987e50
         });
        
     });
    */
   },
   components: {
-                     UploadImages,
-                 },
+    //    UploadImages,
+  },
   methods: {
-    handleImages(files){
-        console.log("upload test: " + files);
+    handleImages(files) {
+      console.log("upload test: " + files);
     },
     show(item) {
       this.cert = item;
       this.dialogShow = true;
     },
     uploadImg(file) {
-       var reader = new FileReader();
-       reader.readAsDataURL(file);
-       // var accounts = await web3.eth.getAccounts()
-        
-       reader.onload = () => {
-        this.data = reader.result;
-        console.log(web3.utils.sha3(this.data));
-        var hash = web3.utils.sha3(this.data);
-        var signature = web3.eth.personal.sign(hash, this.address);
-        signature.then(function(result){
-          console.log(result);
-        });
-      }
+      this.viewImage = URL.createObjectURL(file);
+      console.log(URL.createObjectURL(file));
+
       // console.log(web3.utils.sha3("hjgsdgsk325235"));
-      
+
       // this.viewImage = URL.createObjectURL(file);
       // const requestOptions = {
       //   method: "POST",
@@ -343,7 +286,6 @@ export default {
       //   ))
       //   .then(data => (
       //     console.log(data)));
-      
     },
     uploadCert(file, title) {
       if (!file && title == "") {
@@ -351,14 +293,25 @@ export default {
       } else if (this.address != "") {
         //chỗ này sẽ chạy cái function upload ảnh lên nơi lưu trữ, func này cần trả về url của ảnh
 
-        let imageUrl = "https://source.unsplash.com/random/800x600/"; //lấy ngẫu nhiên cái ảnh nào đó trên mạng. sẽ thay bằng cái url được return của func trên
+        const address = this.address;
+        var certData = title + new Date().getTime();
+        console.log(web3.utils.sha3(certData));
+        var hash = web3.utils.sha3(certData);
+        var signature = web3.eth.personal.sign(hash, this.address);
+        signature.then(function (result) {
+          const files = new Moralis.File(file.name, file);
+          files.saveIPFS().then((data) => {
+            //console.log(this.address);
+            contract.methods
+              .addCert(title, data._ipfs, result)
+              .send({ from: address })
+              .then(() => {
+                alert("Upload Thành Công");
+              });
+          });
+        });
 
-        // contract.methods
-        //   .addCert(imageUrl, title)
-        //   .send({ from: this.address })
-        //   .then(() => {
-        //     alert("Upload Thành Công");
-        //   });
+        //let imageUrl = "https://source.unsplash.com/random/800x600/"; //lấy ngẫu nhiên cái ảnh nào đó trên mạng. sẽ thay bằng cái url được return của func trên
 
         this.file = null;
         this.title = "";
@@ -369,7 +322,79 @@ export default {
   },
 };
 
+async function getCertificate(address) {
+  //console.log("hello  ")
+  var items = [];
+  // Lay tong so Certificate
+  var a = await contract.methods
+    .Counter()
+    .call()
+    .then(async (length) => {
+      //console.log("Total Certificate: " + length);
+      // loop through each certificate
+      for (let i = 0; i < length; i++) {
+        var b = await contract.methods
+          .getCerbyID(i)
+          .call()
+          .then(async (data) => {
+            console.log("data", data);
+            if (data[0]) {
+              // get image from metadata
 
+              /* var metalink = data[2].replace(
+                "ipfs://",
+                "https://ipfs.io/ipfs/"
+              );
+              const response = await fetch(metalink);
+              if (!response.ok) throw new Error(response.statusText);
+              const json = await response.json();
+
+              let image = json.image.replace(
+                "ipfs://",
+                "https://ipfs.io/ipfs/"
+              ); */
+              // console.log ("---img: " + image);
+              /// update item
+              var newitem = {
+                userAddress: data[5],
+                title: data[1],
+                date: timeConverter(data[3]),
+                tokenUrl: data[2],
+              };
+              console.log( newitem.userAddress.toUpperCase(),' ', address.toUpperCase())
+              if (newitem.userAddress.toUpperCase() == address.toUpperCase()) items.push(newitem);
+            }
+          });
+      }
+    });
+  return items;
+}
+function timeConverter(UNIX_timestamp) {
+  var a = new Date(UNIX_timestamp * 1000);
+  var months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+  var year = a.getFullYear();
+  var month = months[a.getMonth()];
+  var date = a.getDate();
+  var hour = a.getHours();
+  var min = a.getMinutes();
+  var sec = a.getSeconds();
+  var time =
+    date + " " + month + " " + year + " " + hour + ":" + min + ":" + sec;
+  return time;
+}
 </script>
 
 <style lang="css" scoped>

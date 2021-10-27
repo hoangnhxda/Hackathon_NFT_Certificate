@@ -75,7 +75,7 @@ export default {
 
     getCertificate().then((data)=>{
       this.items=data;
-      cosole.log(data);
+      console.log('data: ',data);
     })
     
     
@@ -99,22 +99,23 @@ async function getCertificate() {
        var b = await contract.methods.getCerbyID(i).call().then(async (data) =>{
          console.log('data',data);
         if(data[0]){
+
            // get image from metadata
-          
-          var metalink = data[2].replace("ipfs://","https://ipfs.io/ipfs/");
+          console.log('da: ',data)
+          /* var metalink = data[2].replace("ipfs://","https://ipfs.io/ipfs/");
           const response = await fetch(metalink);
           if(!response.ok)
           throw new Error(response.statusText);
           const json = await response.json();
-          
-          let image = json.image.replace("ipfs://","https://ipfs.io/ipfs/");
+          console.log
+          let image = json.image.replace("ipfs://","https://ipfs.io/ipfs/"); */
           // console.log ("---img: " + image); 
           /// update item
           var newitem = {
             userAddress: data[4],
             title: data[1],
             date: timeConverter(data[3]),
-            tokenUrl: image,
+            tokenUrl: data[2],
           }
           items.push(newitem);
         }
@@ -122,6 +123,7 @@ async function getCertificate() {
     }
 
   })
+  
   return items;
 } 
 
