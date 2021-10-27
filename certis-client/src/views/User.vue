@@ -1,5 +1,6 @@
 <template>
   <v-container>
+<<<<<<< HEAD
     <v-row>
       <v-col cols="8">
         <v-data-table
@@ -19,6 +20,29 @@
                 hide-details
                 class="mr-5"
               ></v-text-field>
+=======
+     <UploadImages accept="image/*"
+                        label="File input"
+                        v-model="file" 
+                        @change="console.log(file)"/>
+    <v-data-table
+      :headers="headers"
+      :items="items"
+      class="elevation-1"
+      loading="true"
+      :search="search"
+    >
+      <template v-slot:top>
+        <v-toolbar flat>
+          <v-text-field
+            v-model="search"
+            append-icon="mdi-magnify"
+            label="Search"
+            single-line
+            hide-details
+            class="mr-5"
+          ></v-text-field>
+>>>>>>> 1aca08005ef6c00da05725c03477fc9da4987e50
 
               <v-dialog
                 v-model="dialog"
@@ -196,7 +220,8 @@
 </template>
 
 <script>
-import { contract } from "../web3";
+import { web3, contract } from "../web3";
+ import UploadImages from "vue-upload-drop-images"
 //import { NFTStorage, File } from "nft.storage";
 /* const apiKey =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDJEYTU1QmZlNjVBYkI2NjZiZkY2NjgxYmE0ZWY1NTM2ODdjNmIwYjIiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTYzNDU3NDYxMTM4NiwibmFtZSI6IkNlcnQifQ.6YOAUWGWF9OIY2iF-buoTDuN0NwQ9pE5Ajm1573VxjU";
@@ -220,10 +245,16 @@ export default {
     items: [],
   }),
   beforeMount() {
+<<<<<<< HEAD
     if (!window.ethereum) {
+=======
+    /*
+    if(!window.ethereum) {
+>>>>>>> 1aca08005ef6c00da05725c03477fc9da4987e50
       alert("Metamask??");
       this.$router.push("/");
     }
+<<<<<<< HEAD
     ethereum.request({ method: "eth_requestAccounts" }).then((acc) => {
       this.address = acc[0];
       console.log(this.address);
@@ -236,25 +267,83 @@ export default {
           );
         });
     });
+=======
+    */
+    //checkmetamask();
+    
+    // Connect to MetaMask
+    ethereum
+      .request({ method: "eth_requestAccounts" })
+      .then((acc) => {
+        this.address = acc[0];
+        console.log("Current Account: "+this.address);
+      })
+>>>>>>> 1aca08005ef6c00da05725c03477fc9da4987e50
 
+    window.ethereum.on('accountsChanged',(acc)=>{
+        this.address = acc[0];
+        console.log("Current Account: "+this.address);
+    }) 
+ /*
     contract.events.dataChange().on("data", () => {
+     
       contract.methods
         .getCerts()
         .call()
         .then((data) => {
+<<<<<<< HEAD
           this.items = data.filter(
             (cert) => cert[0].toUpperCase() == this.address.toUpperCase()
           );
+=======
+          console.log(this.address);
+          this.items = data.filter(cert => cert[0].toUpperCase()==this.address.toUpperCase());
+>>>>>>> 1aca08005ef6c00da05725c03477fc9da4987e50
         });
+       
     });
+   */
   },
+  components: {
+                     UploadImages,
+                 },
   methods: {
+    handleImages(files){
+        console.log("upload test: " + files);
+    },
     show(item) {
       this.cert = item;
       this.dialogShow = true;
     },
     uploadImg(file) {
-      this.viewImage = URL.createObjectURL(file);
+       var reader = new FileReader();
+       reader.readAsDataURL(file);
+       // var accounts = await web3.eth.getAccounts()
+        
+       reader.onload = () => {
+        this.data = reader.result;
+        console.log(web3.utils.sha3(this.data));
+        var hash = web3.utils.sha3(this.data);
+        var signature = web3.eth.personal.sign(hash, this.address);
+        signature.then(function(result){
+          console.log(result);
+        });
+      }
+      // console.log(web3.utils.sha3("hjgsdgsk325235"));
+      
+      // this.viewImage = URL.createObjectURL(file);
+      // const requestOptions = {
+      //   method: "POST",
+      //   headers: { "Content-Type": "multipart/form-data" },
+      //   body: file
+      // };
+      // fetch("https://api.imgbb.com/1/upload", requestOptions)
+      //   .then(response => response.json(
+      //     console.log(response.json)
+      //   ))
+      //   .then(data => (
+      //     console.log(data)));
+      
     },
     uploadCert(file, title) {
       if (!file && title == "") {
@@ -264,12 +353,12 @@ export default {
 
         let imageUrl = "https://source.unsplash.com/random/800x600/"; //lấy ngẫu nhiên cái ảnh nào đó trên mạng. sẽ thay bằng cái url được return của func trên
 
-        contract.methods
-          .addCert(imageUrl, title)
-          .send({ from: this.address })
-          .then(() => {
-            alert("Upload Thành Công");
-          });
+        // contract.methods
+        //   .addCert(imageUrl, title)
+        //   .send({ from: this.address })
+        //   .then(() => {
+        //     alert("Upload Thành Công");
+        //   });
 
         this.file = null;
         this.title = "";
@@ -279,6 +368,8 @@ export default {
     },
   },
 };
+
+
 </script>
 
 <style lang="css" scoped>
