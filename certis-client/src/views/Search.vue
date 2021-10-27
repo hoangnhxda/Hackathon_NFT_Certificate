@@ -43,7 +43,7 @@ export default {
     cert:{},
     dialog: false,
     headers: [
-      { text: "User Address", value: "userAddress" },
+      { text: "Certificate Id", value: "userAddress" },
       { text: "Title", value: "title" },
       { text: "Time", value: "date" },
       { text: "Actions", value: "actions", sortable: false },
@@ -58,32 +58,46 @@ export default {
     }
   }
   ,
+  beforeCreate(){
+    window.ethereum
+    .request({ method: 'eth_requestAccounts' })
+    .then(handleAccountsChanged)
+    .catch((error) => {
+      if (error.code === 4001) {
+        // EIP-1193 userRejectedRequest error
+        console.log('Please connect to MetaMask.');
+      } else {
+        console.error(error);
+      }
+    });
+  },
   beforeMount() {
 
-    /*
-    contract.methods.getCerts().call().then((data)=>{
-      data.forEach((item)=>{
-        console.log(item)
-      })
+    getCertificate().then((data)=>{
+      this.items=data;
+      cosole.log(data);
     })
-    */
-    console.log (getCertificate());
-
     
+    
+    console.log(getCertificate());
+
+     console.log(contract.methods.getAllCer().call().then((data)=>{
+       console.log(data)
+     }));
   },
 };
 
 
 async function getCertificate() {
-  console.log("hello  ")
+  //console.log("hello  ")
   var items = [];
   // Lay tong so Certificate
     var a = await contract.methods.Counter().call().then(async (length)=>{
-    console.log("Total Certificate: " + length);
+    //console.log("Total Certificate: " + length);
     // loop through each certificate
     for(let i = 0; i < length; i++){
        var b = await contract.methods.getCerbyID(i).call().then(async (data) =>{
-        // console.log('data',data);
+         console.log('data',data);
         if(data[0]){
            // get image from metadata
           
