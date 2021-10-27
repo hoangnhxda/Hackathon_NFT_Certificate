@@ -43,7 +43,7 @@ export default {
     cert:{},
     dialog: false,
     headers: [
-      { text: "User Address", value: "userAddress" },
+      { text: "Certificate Address", value: "userAddress" },
       { text: "Title", value: "title" },
       { text: "Time", value: "date" },
       { text: "Actions", value: "actions", sortable: false },
@@ -60,26 +60,21 @@ export default {
   ,
   beforeMount() {
 
-    /*
-    contract.methods.getCerts().call().then((data)=>{
-      data.forEach((item)=>{
-        console.log(item)
-      })
+    getCertificate().then((data)=>{
+      this.items=data;
+      console.log(data);
     })
-    */
-    console.log (getCertificate());
-
-    
   },
 };
 
 
 async function getCertificate() {
   console.log("Get All Certificate:")
+
   var items = [];
   // Lay tong so Certificate
     var a = await contract.methods.Counter().call().then(async (length)=>{
-    console.log("Total Certificate: " + length);
+    //console.log("Total Certificate: " + length);
     // loop through each certificate
     for(let i = 0; i < length; i++){
        var b = await contract.methods.getCerbyID(i).call().then(async (data) =>{
