@@ -31,10 +31,10 @@ contract quanly{
     }
     
     //hàm thực hiện việc cấp chứng nhận. Chỉ những người được cấp quyền mới có thể chạy
-    function addCert( string memory title, string memory tokenUrl, string memory signature) public payable{
+    function addCert(address userAddress, string memory title, string memory tokenUrl, string memory signature) public payable{
         require(msg.value == 0.001 ether);
-        uint tokenID = NFT.safeMint(msg.sender,tokenUrl);
-        student[msg.sender].push(AllCert.length);
+        uint tokenID = NFT.safeMint(userAddress,tokenUrl);
+        student[userAddress].push(AllCert.length);
         AllCert.push(Certificate(title,tokenUrl,block.timestamp,signature,tokenID,msg.sender));
         emit issueCert(title, signature, tokenUrl , tokenID,msg.sender);
     }

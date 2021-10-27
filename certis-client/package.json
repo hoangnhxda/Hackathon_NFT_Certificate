@@ -12,7 +12,7 @@
     "moralis": "^0.0.97",
     "nft.storage": "^3.3.0",
     "vue": "^2.6.11",
-    "vue-router": "^3.2.0",
+    "vue-router": "^3.5.3",
     "vue-upload-drop-images": "^1.0.7",
     "vuetify": "^2.4.0",
     "vuex": "^3.4.0",

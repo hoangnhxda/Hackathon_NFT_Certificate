@@ -1,6 +1,7 @@
 var Web3 = require('web3');
 var web3 = new Web3(window.ethereum);
 //Web3.givenProvider || 'wss://ropsten.infura.io/ws/v3/acf6228312504a1391e4eb81310a89a9'
+
 const abi = [
 	{
 		"anonymous": false,
@@ -41,6 +42,11 @@ const abi = [
 	},
 	{
 		"inputs": [
+			{
+				"internalType": "address",
+				"name": "userAddress",
+				"type": "address"
+			},
 			{
 				"internalType": "string",
 				"name": "title",
@@ -164,7 +170,7 @@ const abi = [
 	}
 ]
 
-const address = "0x7da82E93b2C6a3Ed73d302F85c11283B5Bac502b" //contract address
+const address = "0xEf071C2eb669b3577B4eDE80769442021a34ec00" //contract address
 
 const contract = new web3.eth.Contract(abi, address);
 

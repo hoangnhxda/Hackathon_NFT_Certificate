@@ -69,6 +69,11 @@
 			{
 				"inputs": [
 					{
+						"internalType": "address",
+						"name": "userAddress",
+						"type": "address"
+					},
+					{
 						"internalType": "string",
 						"name": "title",
 						"type": "string"
@@ -306,11 +311,11 @@
 			]
 		},
 		"contract(ipfs).sol": {
-			"keccak256": "0xcf06c5c3479cc32d3a8a6a6c85cfeb502a1b2091fe2832cf88bdbf7ab3196b0c",
+			"keccak256": "0x1ee718ae10e06d2c8338975fdb538675045ccb95cbad4d31e1b34c8d449552b3",
 			"license": "open-source",
 			"urls": [
-				"bzz-raw://1199c8c902d533bdef24d012cc8243265aae6b437b7b7ab394baa6176d50a806",
-				"dweb:/ipfs/QmW4KBzpnveKDwjsoL6bTocQZtJk6ctDQxpXNMiYuN4eAi"
+				"bzz-raw://cf6efdf0a1bd21abfc1411bb75b2d593c3420647ad329f3965683adf681e9b5a",
+				"dweb:/ipfs/QmfFDc5KesX9yxxwB1XTrEd3PdfPjY59yXSNhQXRpgzGLF"
 			]
 		}
 	},
