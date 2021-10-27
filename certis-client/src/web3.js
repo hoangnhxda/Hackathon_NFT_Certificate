@@ -59,7 +59,7 @@ const abi = [
 		],
 		"name": "addCert",
 		"outputs": [],
-		"stateMutability": "nonpayable",
+		"stateMutability": "payable",
 		"type": "function"
 	},
 	{
@@ -100,45 +100,19 @@ const abi = [
 		"type": "function"
 	},
 	{
-		"inputs": [],
-		"name": "getAllCer",
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "userAddress",
+				"type": "address"
+			}
+		],
+		"name": "getCerbyAddress",
 		"outputs": [
 			{
-				"components": [
-					{
-						"internalType": "string",
-						"name": "title",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "tokenUrl",
-						"type": "string"
-					},
-					{
-						"internalType": "uint256",
-						"name": "date",
-						"type": "uint256"
-					},
-					{
-						"internalType": "string",
-						"name": "signature",
-						"type": "string"
-					},
-					{
-						"internalType": "uint256",
-						"name": "tokenID",
-						"type": "uint256"
-					},
-					{
-						"internalType": "address",
-						"name": "userAddress",
-						"type": "address"
-					}
-				],
-				"internalType": "struct quanly.Certificate[]",
+				"internalType": "uint256[]",
 				"name": "",
-				"type": "tuple[]"
+				"type": "uint256[]"
 			}
 		],
 		"stateMutability": "view",
@@ -190,11 +164,12 @@ const abi = [
 	}
 ]
 
-const address = "0x08b2322F34888823524067c3734ED3B0C5639260" //contract address
+const address = "0x7da82E93b2C6a3Ed73d302F85c11283B5Bac502b" //contract address
 
 const contract = new web3.eth.Contract(abi, address);
-checkmetamask();
+
 async function checkmetamask(){
+	console.log("Check Metamask");
 	if (window.ethereum) {
 		try {
 		  // check if the chain to connect to is installed
@@ -226,5 +201,54 @@ async function checkmetamask(){
 		// if no window.ethereum then MetaMask is not installed
 		alert('MetaMask is not installed. Please consider installing it: https://metamask.io/download.html');
 	  } 
+	  
   }
-export { web3, contract }
+  async function getUserCertificate(address){
+	console.log ("Get certificate of "+address);
+	var items = [];
+	await contract.methods.getCerbyAddress(address).call().then(async (array)=>{
+		array.forEach(async (id)=> {
+			let item = await getCerbyID(id);	
+			items.push(item);	
+		});
+	})
+	return items;
+  }
+
+  async function getCerbyID(id){
+	let newitem = {};
+	await contract.methods.getCerbyID(id).call().then(async (data) =>{
+        if(data[0]){
+           // get image from metadata
+          let metalink = data[2].replace("ipfs://","https://ipfs.io/ipfs/");
+          const response = await fetch(metalink);
+          if(!response.ok)
+          throw new Error(response.statusText);
+          const json = await response.json();
+          let image = json.image.replace("ipfs://","https://ipfs.io/ipfs/");
+		  /// update item
+          newitem = {
+            userAddress: data[5],
+            title: data[1],
+            date: timeConverter(data[3]),
+            tokenUrl: image,
+          }
+        }
+    });
+	//console.log(newitem);
+	return newitem;
+  }
+
+  function timeConverter(UNIX_timestamp){
+	var a = new Date(UNIX_timestamp * 1000);
+	var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+	var year = a.getFullYear();
+	var month = months[a.getMonth()];
+	var date = a.getDate();
+	var hour = a.getHours();
+	var min = a.getMinutes();
+	var sec = a.getSeconds();
+	var time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec ;
+	return time;
+  }
+export { web3, contract,checkmetamask,getUserCertificate}

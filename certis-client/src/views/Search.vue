@@ -75,7 +75,7 @@ export default {
 
 
 async function getCertificate() {
-  console.log("hello  ")
+  console.log("Get All Certificate:")
   var items = [];
   // Lay tong so Certificate
     var a = await contract.methods.Counter().call().then(async (length)=>{
@@ -97,7 +97,7 @@ async function getCertificate() {
           // console.log ("---img: " + image); 
           /// update item
           var newitem = {
-            userAddress: data[4],
+            userAddress: data[5],
             title: data[1],
             date: timeConverter(data[3]),
             tokenUrl: image,

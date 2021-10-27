@@ -120,7 +120,7 @@
 </template>
 
 <script>
-import { web3, contract } from "../web3";
+import { web3, contract,checkmetamask,getUserCertificate } from "../web3";
  import UploadImages from "vue-upload-drop-images"
 //import { NFTStorage, File } from "nft.storage";
 /* const apiKey =
@@ -144,39 +144,25 @@ export default {
     items: [],
   }),
   beforeMount() {
-    /*
-    if(!window.ethereum) {
-      alert("Metamask??");
-      this.$router.push('/')
-    }
-    */
-    //checkmetamask();
-    
+    checkmetamask();
     // Connect to MetaMask
     ethereum
       .request({ method: "eth_requestAccounts" })
       .then((acc) => {
         this.address = acc[0];
         console.log("Current Account: "+this.address);
+      
+       getUserCertificate(this.address).then((result) => console.log(result));  //return array of User Certificate
       })
-
+    // Tự động đổi this.address khi user đổi account trên metamask
     window.ethereum.on('accountsChanged',(acc)=>{
         this.address = acc[0];
         console.log("Current Account: "+this.address);
+       getUserCertificate(this.address).then((result) => console.log(result));  //return array of User Certificate
     }) 
- /*
-    contract.events.dataChange().on("data", () => {
-     
-      contract.methods
-        .getCerts()
-        .call()
-        .then((data) => {
-          console.log(this.address);
-          this.items = data.filter(cert => cert[0].toUpperCase()==this.address.toUpperCase());
-        });
-       
-    });
-   */
+
+  
+
   },
   components: {
                      UploadImages,
