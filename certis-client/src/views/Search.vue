@@ -43,7 +43,7 @@ export default {
     cert:{},
     dialog: false,
     headers: [
-      { text: "Certificate Address", value: "userAddress" },
+      { text: "Certificate Id", value: "userAddress" },
       { text: "Title", value: "title" },
       { text: "Time", value: "date" },
       { text: "Actions", value: "actions", sortable: false },
@@ -58,21 +58,38 @@ export default {
     }
   }
   ,
+  beforeCreate(){
+    window.ethereum
+    .request({ method: 'eth_requestAccounts' })
+    .then(handleAccountsChanged)
+    .catch((error) => {
+      if (error.code === 4001) {
+        // EIP-1193 userRejectedRequest error
+        console.log('Please connect to MetaMask.');
+      } else {
+        console.error(error);
+      }
+    });
+  },
   beforeMount() {
 
     getCertificate().then((data)=>{
       this.items=data;
-
       console.log('data: ',data);
-
     })
+    
+    
+    console.log(getCertificate());
+
+     console.log(contract.methods.getAllCer().call().then((data)=>{
+       console.log(data)
+     }));
   },
 };
 
 
 async function getCertificate() {
-  console.log("Get All Certificate:")
-
+  //console.log("hello  ")
   var items = [];
   // Lay tong so Certificate
     var a = await contract.methods.Counter().call().then(async (length)=>{
@@ -80,11 +97,11 @@ async function getCertificate() {
     // loop through each certificate
     for(let i = 0; i < length; i++){
        var b = await contract.methods.getCerbyID(i).call().then(async (data) =>{
-        // console.log('data',data);
+         console.log('data',data);
         if(data[0]){
 
            // get image from metadata
-          //console.log('da: ',data)
+          console.log('da: ',data)
           /* var metalink = data[2].replace("ipfs://","https://ipfs.io/ipfs/");
           const response = await fetch(metalink);
           if(!response.ok)
@@ -95,7 +112,7 @@ async function getCertificate() {
           // console.log ("---img: " + image); 
           /// update item
           var newitem = {
-            userAddress: data[5],
+            userAddress: data[4],
             title: data[1],
             date: timeConverter(data[3]),
             tokenUrl: data[2],

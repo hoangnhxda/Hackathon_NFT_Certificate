@@ -6,7 +6,7 @@ contract quanly{
     
     CertificateNFT NFT;
     Certificate[] AllCert;
-    mapping(address => uint[]) student; // each student can have many Certificate, uint: array of Certificate ID
+    
     event issueCert(string title, string signature, string tokenUrl ,uint tokenID,address userAddress);
    
     modifier onlyOwner {
@@ -20,8 +20,13 @@ contract quanly{
         string tokenUrl;//nội dung
         uint date;//ngày cấp
         string signature;//chữ ký sô của người cấp
-        uint tokenID; // TokenID cùa NFT
+        uint tokenID;
         address userAddress;
+    }
+    //cấu trúc một người có quyền cấp
+    struct Author{
+        string name;//tên
+        bool status;//quyền hạn (được cấp hoặc không)
     }
     
     address public deployAddress;//biến lưu địa chỉ của quản trị viên tối cao
@@ -31,13 +36,14 @@ contract quanly{
     }
     
     //hàm thực hiện việc cấp chứng nhận. Chỉ những người được cấp quyền mới có thể chạy
-    function addCert(address userAddress, string memory title, string memory tokenUrl, string memory signature) public payable{
-        require(msg.value == 0.001 ether);
-        uint tokenID = NFT.safeMint(userAddress,tokenUrl);
-        student[userAddress].push(AllCert.length);
-        AllCert.push(Certificate(title,tokenUrl,block.timestamp,signature,tokenID,msg.sender));
-        emit issueCert(title, signature, tokenUrl , tokenID,msg.sender);
+    function addCert( string memory title, string memory tokenUrl, string memory signature) public{
+            uint tokenID = NFT.safeMint(msg.sender,tokenUrl);
+            //student[_student].push(AllCert.length);
+            AllCert.push(Certificate(title,tokenUrl,block.timestamp,signature,tokenID,msg.sender));
+            emit issueCert(title, signature, tokenUrl , tokenID,msg.sender);
     }
+    
+
     
     // Lấy danh sách chứng nhận bằng array Allcert
     function getCerbyID(uint _ordering) public view returns(bool,string memory, string memory, uint, uint,address){
@@ -49,11 +55,9 @@ contract quanly{
             return (false,"","",0,0,empty);
         }
     }
-    // return ra Array of ID của mỗi student, từ ID này có thể dùng getCerbyID truy cập vô Certificate
-    function getCerbyAddress(address userAddress ) public view returns( uint[] memory){
-        return student[userAddress];
+    function getAllCer() public view returns(Certificate[] memory){
+        return AllCert;
     }
-
     function Counter() public view returns(uint){
         return AllCert.length;
     }

@@ -1,29 +1,24 @@
 <template>
   <v-container>
-
-
-     <UploadImages accept="image/*"
-                        label="File input"
-                        v-model="file" 
-                        @change="console.log(file)"/>
-    <v-data-table
-      :headers="headers"
-      :items="items"
-      class="elevation-1"
-      loading="true"
-      :search="search"
-    >
-      <template v-slot:top>
-        <v-toolbar flat>
-          <v-text-field
-            v-model="search"
-            append-icon="mdi-magnify"
-            label="Search"
-            single-line
-            hide-details
-            class="mr-5"
-          ></v-text-field>
-
+    <v-row>
+      <v-col cols="8">
+        <v-data-table
+          :headers="headers"
+          :items="items"
+          class="elevation-1"
+          loading="true"
+          :search="search"
+        >
+          <template v-slot:top>
+            <v-toolbar flat>
+              <v-text-field
+                v-model="search"
+                append-icon="mdi-magnify"
+                label="Search"
+                single-line
+                hide-details
+                class="mr-5"
+              ></v-text-field>
 
               <v-dialog
                 v-model="dialog"
@@ -198,11 +193,8 @@
 </template>
 
 <script>
-
-import { web3, contract,checkmetamask,getUserCertificate } from "../web3";
- import UploadImages from "vue-upload-drop-images"
-import {ipfs} from "../ipfs";
-
+import { web3, contract } from "../web3";
+// import UploadImages from "vue-upload-drop-images"
 //import { NFTStorage, File } from "nft.storage";
 /* const apiKey =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDJEYTU1QmZlNjVBYkI2NjZiZkY2NjgxYmE0ZWY1NTM2ODdjNmIwYjIiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTYzNDU3NDYxMTM4NiwibmFtZSI6IkNlcnQifQ.6YOAUWGWF9OIY2iF-buoTDuN0NwQ9pE5Ajm1573VxjU";
@@ -226,28 +218,44 @@ export default {
     items: [],
   }),
   beforeMount() {
+    if (!window.ethereum) {
+      alert("Metamask??");
+      this.$router.push("/");
+    }
 
+    //checkmetamask();
 
-    checkmetamask();
     // Connect to MetaMask
-    ethereum
-      .request({ method: "eth_requestAccounts" })
-      .then((acc) => {
-        this.address = acc[0];
-        console.log("Current Account: "+this.address);
-      
-        getUserCertificate(this.address).then((result) => console.log(result));  //return array of User Certificate
-      })
+    window.ethereum.request({ method: "eth_requestAccounts" }).then((acc) => {
+      this.address = acc[0];
+      console.log("Current Account: " + this.address);
+      getCertificate(this.address).then((data) => {
+        this.items = data;
+        console.log("data: ", this.items);
+      });
+    });
 
-    window.ethereum.on('accountsChanged',(acc)=>{
-        this.address = acc[0];
-        console.log("Current Account: "+this.address);
-        getUserCertificate(this.address).then((result) => console.log(result));  //return array of User Certificate
-    }) 
-
-    ipfs("Name",'test1.jpg',"20/10/2021","Description");
-  
-
+    window.ethereum.on("accountsChanged", (acc) => {
+      this.address = acc[0];
+      console.log("Current Account: " + this.address);
+      getCertificate(this.address).then((data) => {
+        this.items = data;
+        console.log("data: ", this.items);
+      });
+    });
+    /*
+    contract.events.dataChange().on("data", () => {
+     
+      contract.methods
+        .getCerts()
+        .call()
+        .then((data) => {
+          console.log(this.address);
+          this.items = data.filter(cert => cert[0].toUpperCase()==this.address.toUpperCase());
+        });
+       
+    });
+   */
   },
   components: {
     //    UploadImages,
@@ -313,7 +321,7 @@ export default {
     },
   },
 };
-/* 
+
 async function getCertificate(address) {
   //console.log("hello  ")
   var items = [];
@@ -344,7 +352,7 @@ async function getCertificate(address) {
               let image = json.image.replace(
                 "ipfs://",
                 "https://ipfs.io/ipfs/"
-              ); 
+              ); */
               // console.log ("---img: " + image);
               /// update item
               var newitem = {
@@ -387,7 +395,6 @@ function timeConverter(UNIX_timestamp) {
     date + " " + month + " " + year + " " + hour + ":" + min + ":" + sec;
   return time;
 }
-*/
 </script>
 
 <style lang="css" scoped>
