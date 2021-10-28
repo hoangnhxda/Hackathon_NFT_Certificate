@@ -194,9 +194,8 @@
 
 <script>
 
-import { web3, contract,checkmetamask,getUserCertificate } from "../web3";
- import UploadImages from "vue-upload-drop-images"
-import {ipfs} from "../ipfs";
+import { web3, contract,contract_Infura,checkmetamask,getUserCertificate } from "../web3";
+
 
 //import { NFTStorage, File } from "nft.storage";
 /* const apiKey =
@@ -220,6 +219,7 @@ export default {
     ],
     items: [],
   }),
+    
   beforeMount() {
 
 
@@ -240,7 +240,28 @@ export default {
         getUserCertificate(this.address).then((result) => this.items = result);  //return array of User Certificate
     }) 
 
-    ipfs("Name",'test1.jpg',"20/10/2021","Description");
+    contract_Infura.events.issueCert({filter:{},fromBlock:'latest'},function(err,data){
+        if(err){
+            console.log("Error to get event from sm");
+
+        }else{
+          console.log("tu infura,  "+data);
+          console.log("tu infura,  "+data.returnValues[0]);
+          console.log("tu infura,  "+data.returnValues[1]);
+          console.log("tu infura,  "+data.returnValues[2]);
+          console.log("tu infura,  "+data.returnValues[3]);
+          console.log("tu infura,  "+data.returnValues[4]);
+          let newitem = {
+            userAddress: data.returnValues[0] ,
+            title: data.returnValues[1],
+            date: data.returnValues[2],
+            tokenUrl: data.returnValues[3],
+          }
+          console.log (newitem);
+          console.log(this.items);
+        }
+    })
+    
   
 
   },
@@ -302,7 +323,7 @@ export default {
             }
             const metadatafiles = new Moralis.File("metadata.json", {base64 : btoa(JSON.stringify(metadata))});
             metadatafiles.saveIPFS().then((data) => {
-              //console.log(metadatafiles._ipfs);
+              console.log(metadatafiles._ipfs);
               console.log("minting");
               contract.methods
               .addCert(address,title, data._ipfs, result)

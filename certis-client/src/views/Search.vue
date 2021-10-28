@@ -94,8 +94,8 @@ async function getCertificate() {
           let image = json.image.replace("ipfs://","https://ipfs.io/ipfs/"); 
           // console.log ("---img: " + image); 
           /// update item
-          maxLength = data[5].length;
-          fix_address = data[5].substr(0, 7)+"..."+data[5].substr(maxLength-4, maxLength)
+          let maxLength = data[5].length;
+          let fix_address = data[5].substr(0, 7)+"..."+data[5].substr(maxLength-4, maxLength);
           var newitem = {
             userAddress: fix_address,
             title: data[1],

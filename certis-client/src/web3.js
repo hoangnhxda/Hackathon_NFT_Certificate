@@ -171,8 +171,13 @@ const abi = [
 ]
 
 const address = "0xEf071C2eb669b3577B4eDE80769442021a34ec00" //contract address
-
+// contract
 const contract = new web3.eth.Contract(abi, address);
+// infura
+var provider = new Web3.providers.WebsocketProvider("wss://rinkeby.infura.io/ws/v3/536fdf7a651e4d42b7027d9a477a4f4e")
+var web3_infura = new Web3(provider);
+var contract_Infura = new web3_infura.eth.Contract(abi,address);
+
 
 async function checkmetamask(){
 	console.log("Check Metamask");
@@ -257,4 +262,4 @@ async function checkmetamask(){
 	var time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec ;
 	return time;
   }
-export { web3, contract,checkmetamask,getUserCertificate}
+export { web3, contract,contract_Infura,checkmetamask,getUserCertificate}
