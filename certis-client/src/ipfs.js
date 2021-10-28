@@ -6,20 +6,7 @@ const apiKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDA
 
 
 async function ipfs(fname,file,day,des){
-  
-    const client = new NFTStorage({ token: apiKey  })
-    const metadata = await client.store({
-    name: fname,
-    date: day,
-    description: des, 
-    imagename:file,
-    image: new File([await fs.promises.readFile('../public/NFT/'+file)], file, {
-      type: 'image/jpg',
-    }),
-    other: "Other"
-    })
-    console.log(metadata.url)
-    return metadata.url;
+  console.log("abc");
 }
 //
 export { ipfs} 

@@ -85,20 +85,22 @@ async function getCertificate() {
 
            // get image from metadata
           //console.log('da: ',data)
-          /* var metalink = data[2].replace("ipfs://","https://ipfs.io/ipfs/");
+          var metalink = data[2].replace("ipfs://","https://ipfs.io/ipfs/");
           const response = await fetch(metalink);
           if(!response.ok)
           throw new Error(response.statusText);
           const json = await response.json();
           console.log
-          let image = json.image.replace("ipfs://","https://ipfs.io/ipfs/"); */
+          let image = json.image.replace("ipfs://","https://ipfs.io/ipfs/"); 
           // console.log ("---img: " + image); 
           /// update item
+          maxLength = data[5].length;
+          fix_address = data[5].substr(0, 7)+"..."+data[5].substr(maxLength-4, maxLength)
           var newitem = {
-            userAddress: data[5],
+            userAddress: fix_address,
             title: data[1],
             date: timeConverter(data[3]),
-            tokenUrl: data[2],
+            tokenUrl: image
           }
           items.push(newitem);
         }

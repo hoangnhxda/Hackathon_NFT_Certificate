@@ -1,11 +1,6 @@
 <template>
   <v-container>
 
-
-     <UploadImages accept="image/*"
-                        label="File input"
-                        v-model="file" 
-                        @change="console.log(file)"/>
     <v-data-table
       :headers="headers"
       :items="items"
@@ -236,13 +231,13 @@ export default {
         this.address = acc[0];
         console.log("Current Account: "+this.address);
       
-        getUserCertificate(this.address).then((result) => console.log(result));  //return array of User Certificate
+        getUserCertificate(this.address).then((result) => this.items = result);  //return array of User Certificate
       })
 
     window.ethereum.on('accountsChanged',(acc)=>{
         this.address = acc[0];
         console.log("Current Account: "+this.address);
-        getUserCertificate(this.address).then((result) => console.log(result));  //return array of User Certificate
+        getUserCertificate(this.address).then((result) => this.items = result);  //return array of User Certificate
     }) 
 
     ipfs("Name",'test1.jpg',"20/10/2021","Description");
@@ -291,15 +286,32 @@ export default {
         var hash = web3.utils.sha3(certData);
         var signature = web3.eth.personal.sign(hash, this.address);
         signature.then(function (result) {
+          console.log(file.name);
           const files = new Moralis.File(file.name, file);
+
           files.saveIPFS().then((data) => {
-            //console.log(this.address);
-            contract.methods
-              .addCert(title, data._ipfs, result)
-              .send({ from: address })
+        
+            const nft_image = data._ipfs;
+            //console.log(nft_image);
+            const metadata = {
+              name: "Ten cua Certificate",
+              date: "10/10/2021",
+              description: "Noi dung cua certificate",
+              image: nft_image,
+              info: "Ten nha tuyen dung"              
+            }
+            const metadatafiles = new Moralis.File("metadata.json", {base64 : btoa(JSON.stringify(metadata))});
+            metadatafiles.saveIPFS().then((data) => {
+              //console.log(metadatafiles._ipfs);
+              console.log("minting");
+              contract.methods
+              .addCert(address,title, data._ipfs, result)
+              .send({ from: address, value: web3.utils.toWei('0.001','ether') })
               .then(() => {
                 alert("Upload Thành Công");
-              });
+            });
+          
+            })
           });
         });
 
