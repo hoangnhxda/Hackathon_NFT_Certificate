@@ -69,11 +69,6 @@
 			{
 				"inputs": [
 					{
-						"internalType": "address",
-						"name": "userAddress",
-						"type": "address"
-					},
-					{
 						"internalType": "string",
 						"name": "title",
 						"type": "string"
@@ -91,7 +86,7 @@
 				],
 				"name": "addCert",
 				"outputs": [],
-				"stateMutability": "payable",
+				"stateMutability": "nonpayable",
 				"type": "function"
 			},
 			{
@@ -108,19 +103,45 @@
 				"type": "function"
 			},
 			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "userAddress",
-						"type": "address"
-					}
-				],
-				"name": "getCerbyAddress",
+				"inputs": [],
+				"name": "getAllCer",
 				"outputs": [
 					{
-						"internalType": "uint256[]",
+						"components": [
+							{
+								"internalType": "string",
+								"name": "title",
+								"type": "string"
+							},
+							{
+								"internalType": "string",
+								"name": "tokenUrl",
+								"type": "string"
+							},
+							{
+								"internalType": "uint256",
+								"name": "date",
+								"type": "uint256"
+							},
+							{
+								"internalType": "string",
+								"name": "signature",
+								"type": "string"
+							},
+							{
+								"internalType": "uint256",
+								"name": "tokenID",
+								"type": "uint256"
+							},
+							{
+								"internalType": "address",
+								"name": "userAddress",
+								"type": "address"
+							}
+						],
+						"internalType": "struct quanly.Certificate[]",
 						"name": "",
-						"type": "uint256[]"
+						"type": "tuple[]"
 					}
 				],
 				"stateMutability": "view",
@@ -311,11 +332,11 @@
 			]
 		},
 		"contract(ipfs).sol": {
-			"keccak256": "0x1ee718ae10e06d2c8338975fdb538675045ccb95cbad4d31e1b34c8d449552b3",
+			"keccak256": "0x97f8046ae79b4f5a2f7b1de9751ceb2136245564780d1c4016a7c11688deb04e",
 			"license": "open-source",
 			"urls": [
-				"bzz-raw://cf6efdf0a1bd21abfc1411bb75b2d593c3420647ad329f3965683adf681e9b5a",
-				"dweb:/ipfs/QmfFDc5KesX9yxxwB1XTrEd3PdfPjY59yXSNhQXRpgzGLF"
+				"bzz-raw://b27db295407d637ae8aa4f6900107c3781c615ed2d03ac9b9351a086f08bd5d9",
+				"dweb:/ipfs/QmQhqVprHj3x8ZkkrJ5Sdhgurgdpecda8MUzXuakLW4afK"
 			]
 		}
 	},

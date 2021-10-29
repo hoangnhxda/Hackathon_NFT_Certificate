@@ -1,24 +1,24 @@
 <template>
   <v-container>
-
-    <v-data-table
-      :headers="headers"
-      :items="items"
-      class="elevation-1"
-      loading="true"
-      :search="search"
-    >
-      <template v-slot:top>
-        <v-toolbar flat>
-          <v-text-field
-            v-model="search"
-            append-icon="mdi-magnify"
-            label="Search"
-            single-line
-            hide-details
-            class="mr-5"
-          ></v-text-field>
-
+    <v-row>
+      <v-col cols="8">
+        <v-data-table
+          :headers="headers"
+          :items="items"
+          class="elevation-1"
+          loading="true"
+          :search="search"
+        >
+          <template v-slot:top>
+            <v-toolbar flat>
+              <v-text-field
+                v-model="search"
+                append-icon="mdi-magnify"
+                label="Search"
+                single-line
+                hide-details
+                class="mr-5"
+              ></v-text-field>
 
               <v-dialog
                 v-model="dialog"
@@ -193,9 +193,13 @@
 </template>
 
 <script>
-
+/*
 import { web3, contract,contract_Infura,checkmetamask,getUserCertificate } from "../web3";
 
+
+*/
+import { web3, contract } from "../web3";
+// import UploadImages from "vue-upload-drop-images"
 
 //import { NFTStorage, File } from "nft.storage";
 /* const apiKey =
@@ -221,10 +225,16 @@ export default {
   }),
     
   beforeMount() {
+    if (!window.ethereum) {
+      alert("Metamask??");
+      this.$router.push("/");
+    }
 
+    //checkmetamask();
 
-    checkmetamask();
     // Connect to MetaMask
+    /*
+<<<<<<< HEAD
     ethereum
       .request({ method: "eth_requestAccounts" })
       .then((acc) => {
@@ -262,8 +272,38 @@ export default {
         }
     })
     
-  
+  */
 
+    window.ethereum.request({ method: "eth_requestAccounts" }).then((acc) => {
+      this.address = acc[0];
+      console.log("Current Account: " + this.address);
+      getCertificate(this.address).then((data) => {
+        this.items = data;
+        console.log("data: ", this.items);
+      });
+    });
+
+    window.ethereum.on("accountsChanged", (acc) => {
+      this.address = acc[0];
+      console.log("Current Account: " + this.address);
+      getCertificate(this.address).then((data) => {
+        this.items = data;
+        console.log("data: ", this.items);
+      });
+    });
+    /*
+    contract.events.dataChange().on("data", () => {
+     
+      contract.methods
+        .getCerts()
+        .call()
+        .then((data) => {
+          console.log(this.address);
+          this.items = data.filter(cert => cert[0].toUpperCase()==this.address.toUpperCase());
+        });
+       
+    });
+   */
   },
   components: {
     //    UploadImages,
@@ -307,32 +347,30 @@ export default {
         var hash = web3.utils.sha3(certData);
         var signature = web3.eth.personal.sign(hash, this.address);
         signature.then(function (result) {
-          console.log(file.name);
           const files = new Moralis.File(file.name, file);
-
           files.saveIPFS().then((data) => {
-        
+
             const nft_image = data._ipfs;
             //console.log(nft_image);
             const metadata = {
-              name: "Ten cua Certificate",
+              name: title,
               date: "10/10/2021",
               description: "Noi dung cua certificate",
               image: nft_image,
               info: "Ten nha tuyen dung"              
             }
             const metadatafiles = new Moralis.File("metadata.json", {base64 : btoa(JSON.stringify(metadata))});
-            metadatafiles.saveIPFS().then((data) => {
-              console.log(metadatafiles._ipfs);
-              console.log("minting");
+            metadatafiles.saveIPFS().then((meta) =>{
+              console.log("metadata file: " + meta._ipfs);
               contract.methods
-              .addCert(address,title, data._ipfs, result)
-              .send({ from: address, value: web3.utils.toWei('0.001','ether') })
+              .addCert(title, meta._ipfs, result)
+              .send({ from: address })
               .then(() => {
                 alert("Upload Thành Công");
-            });
-          
+              });
+
             })
+
           });
         });
 
@@ -346,7 +384,7 @@ export default {
     },
   },
 };
-/* 
+
 async function getCertificate(address) {
   //console.log("hello  ")
   var items = [];
@@ -364,27 +402,17 @@ async function getCertificate(address) {
           .then(async (data) => {
             console.log("data", data);
             if (data[0]) {
-              // get image from metadata
-
-              /* var metalink = data[2].replace(
-                "ipfs://",
-                "https://ipfs.io/ipfs/"
-              );
-              const response = await fetch(metalink);
-              if (!response.ok) throw new Error(response.statusText);
-              const json = await response.json();
-
-              let image = json.image.replace(
-                "ipfs://",
-                "https://ipfs.io/ipfs/"
-              ); 
-              // console.log ("---img: " + image);
+                const response = await fetch(data[2]);
+                if(!response.ok)
+                throw new Error(response.statusText);
+                const json = await response.json();
+                console.log("json file: " + json.image);
               /// update item
               var newitem = {
                 userAddress: data[5],
                 title: data[1],
                 date: timeConverter(data[3]),
-                tokenUrl: data[2],
+                tokenUrl: json.image,
               };
               console.log( newitem.userAddress.toUpperCase(),' ', address.toUpperCase())
               if (newitem.userAddress.toUpperCase() == address.toUpperCase()) items.push(newitem);
@@ -420,7 +448,6 @@ function timeConverter(UNIX_timestamp) {
     date + " " + month + " " + year + " " + hour + ":" + min + ":" + sec;
   return time;
 }
-*/
 </script>
 
 <style lang="css" scoped>

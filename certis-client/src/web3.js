@@ -1,7 +1,6 @@
 var Web3 = require('web3');
 var web3 = new Web3(window.ethereum);
 //Web3.givenProvider || 'wss://ropsten.infura.io/ws/v3/acf6228312504a1391e4eb81310a89a9'
-
 const abi = [
 	{
 		"anonymous": false,
@@ -43,11 +42,6 @@ const abi = [
 	{
 		"inputs": [
 			{
-				"internalType": "address",
-				"name": "userAddress",
-				"type": "address"
-			},
-			{
 				"internalType": "string",
 				"name": "title",
 				"type": "string"
@@ -65,7 +59,7 @@ const abi = [
 		],
 		"name": "addCert",
 		"outputs": [],
-		"stateMutability": "payable",
+		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
@@ -106,19 +100,45 @@ const abi = [
 		"type": "function"
 	},
 	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "userAddress",
-				"type": "address"
-			}
-		],
-		"name": "getCerbyAddress",
+		"inputs": [],
+		"name": "getAllCer",
 		"outputs": [
 			{
-				"internalType": "uint256[]",
+				"components": [
+					{
+						"internalType": "string",
+						"name": "title",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "tokenUrl",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "date",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "signature",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "tokenID",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address",
+						"name": "userAddress",
+						"type": "address"
+					}
+				],
+				"internalType": "struct quanly.Certificate[]",
 				"name": "",
-				"type": "uint256[]"
+				"type": "tuple[]"
 			}
 		],
 		"stateMutability": "view",
@@ -169,6 +189,7 @@ const abi = [
 		"type": "function"
 	}
 ]
+/*
 
 const address = "0xEf071C2eb669b3577B4eDE80769442021a34ec00" //contract address
 // contract
@@ -263,3 +284,41 @@ async function checkmetamask(){
 	return time;
   }
 export { web3, contract,contract_Infura,checkmetamask,getUserCertificate}
+
+*/
+const address = "0xfE0f156c7A102515f4603dB49c832e9A7a9fdf83" //contract address
+
+const contract = new web3.eth.Contract(abi, address);
+checkmetamask();
+async function checkmetamask() {
+    if (window.ethereum) {
+        try {
+            // check if the chain to connect to is installed
+            await window.ethereum.request({
+                method: 'wallet_switchEthereumChain',
+                params: [{ chainId: '0x4' }], // chainId must be in hexadecimal numbers
+            });
+        } catch (error) {
+            // This error code indicates that the chain has not been added to MetaMask
+            // if it is not, then install it into the user MetaMask
+            if (error.code === 4902) {
+                try {
+                    await window.ethereum.request({
+                        method: 'wallet_addEthereumChain',
+                        params: [{
+                            chainId: '0x4',
+                            rpcUrl: 'https://rinkeby-light.eth.linkpool.io/',
+                        }, ],
+                    });
+                } catch (addError) {
+                    console.error(addError);
+                }
+            }
+            console.error(error);
+        }
+    } else {
+        // if no window.ethereum then MetaMask is not installed
+        alert('MetaMask is not installed. Please consider installing it: https://metamask.io/download.html');
+    }
+}
+export { web3, contract }
